@@ -1,4 +1,3 @@
-import { Action } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 
 import { Id, HashMap } from '../../types';
@@ -29,8 +28,8 @@ export type BoardList = {
 export type BoardState = {
   id: Id | null;
   name: string | null;
-  items: { [id: string]: BoardItem };
-  lists: { [id: string]: BoardList };
+  items: HashMap<BoardItem>;
+  lists: HashMap<BoardList>;
   listsIds: Id[];
 };
 
