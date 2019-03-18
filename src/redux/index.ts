@@ -1,14 +1,16 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
-import * as board from './board';
+import boards, { BoardsState, BoardsActions } from './boards';
+import activeBoard, { ActiveBoardState, ActiveBoardActions } from './activeBoard';
 
-// type StoreState = {
-//   board: board.BoardState;
-// };
+export type StoreState = {
+  boards: BoardsState;
+  activeBoard: ActiveBoardState;
+};
 
-// type StoreActions = board.BoardLoadSuccess;
+export type StoreActions = BoardsActions | ActiveBoardActions;
 
-const rootReducer = combineReducers({ board: board.default });
+const rootReducer = combineReducers<StoreState, StoreActions>({ boards, activeBoard });
 
 export default () => createStore(rootReducer, applyMiddleware(thunk));
