@@ -1,6 +1,9 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import HTML5Backend from 'react-dnd-html5-backend';
+import * as ReactDOM from 'react-dom';
+import { DragDropContextProvider } from 'react-dnd';
+
 import 'typeface-roboto';
 
 import createStore from './redux';
@@ -12,7 +15,9 @@ const store = createStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <DragDropContextProvider backend={HTML5Backend}>
+      <App />
+    </DragDropContextProvider>
   </Provider>,
   document.getElementById('root') as HTMLElement
 );

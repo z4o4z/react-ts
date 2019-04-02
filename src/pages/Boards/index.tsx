@@ -5,11 +5,17 @@ import { Grid, Typography } from '@material-ui/core';
 
 import { ReduxState, MyThunkDispatch } from '../../types';
 
+import withDragLayer from '../../hocks/withDragLayer';
+import withDragAndDrop from '../../hocks/withDragAndDrop';
+
 import { boardsLoad } from '../../redux/boards';
 
 import BoardItem from './components/BoardItem';
 
 type BoardsProps = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
+
+// const BoardItemDragLayer = withDragLayer<React.ComponentProps<typeof BoardItem>>({ type: 'board-item' })(BoardItem);
+const BoardItemDragAndDrop = withDragAndDrop<React.ComponentProps<typeof BoardItem>>({ type: 'board-item' })(BoardItem);
 
 function Boards({ ids, items, loading, boardsLoad }: BoardsProps) {
   useEffect(boardsLoad, []);
@@ -23,7 +29,7 @@ function Boards({ ids, items, loading, boardsLoad }: BoardsProps) {
       ) : (
         ids.map(id => (
           <Grid key={id} xs={6} sm={6} md={3} item>
-            <BoardItem {...items[id]} />
+            <BoardItemDragAndDrop {...items[id]} />
           </Grid>
         ))
       )}
