@@ -1,8 +1,10 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
-import boards, { BoardsState, BoardsActions } from './boards';
-import activeBoard, { ActiveBoardState, ActiveBoardActions } from './activeBoard';
+import { BoardsState, BoardsActions, ActiveBoardState, ActiveBoardActions } from './types';
+
+import boards from './boards';
+import activeBoard from './activeBoard';
 
 export type StoreState = {
   boards: BoardsState;

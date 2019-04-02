@@ -1,13 +1,12 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import 'typeface-roboto';
 
 import createStore from './redux';
 import registerServiceWorker from './registerServiceWorker';
 
 import App from './pages/App/App';
-
-import './index.css';
 
 const store = createStore();
 

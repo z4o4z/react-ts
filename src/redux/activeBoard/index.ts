@@ -1,69 +1,24 @@
-import { ThunkAction } from 'redux-thunk';
-
-import { Id, HashMap } from '../../types';
-import { normalizeArrayOfObjectsByKey } from '../../utils/arrays';
+import { HashMap, MyThunkAction } from '../../types';
+import { normalizeArrayOfObjectsByKey, sortArrayOfIdsByPosition } from '../../utils/arrays';
 
 import data from './mock';
 
-export type ACTIVE_BOARD_LOAD = 'ACTIVE_BOARD_LOAD';
-export const ACTIVE_BOARD_LOAD = 'ACTIVE_BOARD_LOAD';
-
-export type ACTIVE_BOARD_LOADED_SUCCESS = 'ACTIVE_BOARD_LOADED_SUCCESS';
-export const ACTIVE_BOARD_LOADED_SUCCESS = 'ACTIVE_BOARD_LOADED_SUCCESS';
-
-export type ActiveBoardItem = {
-  id: Id;
-  tags: string[];
-  name: string;
-  position: number;
-};
-
-export type ActiveBoardList = {
-  id: Id;
-  name: string;
-  items: Id[];
-  position: number;
-};
-
-export type ActiveBoardState = {
-  id: Id | null;
-  name: string | null;
-  items: HashMap<ActiveBoardItem>;
-  lists: HashMap<ActiveBoardList>;
-  listsIds: Id[];
-};
-
-export type ActiveBoardListRaw = {
-  id: Id;
-  name: string;
-  items: ActiveBoardItem[];
-  position: number;
-};
-
-export type ActiveBoardRaw = {
-  id: Id;
-  name: string;
-  lists: ActiveBoardListRaw[];
-};
-
-export interface ActiveBoardLoadSuccess {
-  type: ACTIVE_BOARD_LOADED_SUCCESS;
-  payload: ActiveBoardRaw;
-}
-
-export type ActiveBoardActions = ActiveBoardLoadSuccess;
-
-export const activeBoardLoad = (): ThunkAction<
-  void,
+import {
+  ActiveBoardRaw,
+  ActiveBoardItem,
+  ActiveBoardList,
   ActiveBoardState,
-  void,
-  ActiveBoardLoadSuccess
-> => dispatch => {
+  ActiveBoardListRaw,
+  ActiveBoardLoadSuccess,
+  ActiveBoardActionsTypes,
+} from './types';
+
+export const activeBoardLoad = (): MyThunkAction<ActiveBoardLoadSuccess> => dispatch => {
   setTimeout(() => dispatch(activeBoardLoadedSuccess(data)));
 };
 
 export const activeBoardLoadedSuccess = (payload: ActiveBoardRaw): ActiveBoardLoadSuccess => ({
-  type: ACTIVE_BOARD_LOADED_SUCCESS,
+  type: ActiveBoardActionsTypes.ACTIVE_BOARD_LOADED_SUCCESS,
   payload,
 });
 
@@ -79,8 +34,9 @@ export default function board(
   state: ActiveBoardState = initialState,
   { type, payload }: ActiveBoardLoadSuccess
 ): ActiveBoardState {
+  console.log(type, ActiveBoardActionsTypes);
   switch (type) {
-    case ACTIVE_BOARD_LOADED_SUCCESS: {
+    case ActiveBoardActionsTypes.ACTIVE_BOARD_LOADED_SUCCESS: {
       const [listsIds, rawLists] = normalizeArrayOfObjectsByKey<ActiveBoardListRaw, 'id'>(
         payload.lists,
         'id'
@@ -97,13 +53,13 @@ export default function board(
 
         lists[key] = {
           ...list,
-          items: itemsIds,
+          items: sortArrayOfIdsByPosition(itemsIds, listItems),
         };
 
         Object.assign(items, listItems);
       });
 
-      return { ...state, lists, items, listsIds };
+      return { ...state, lists, items, listsIds: sortArrayOfIdsByPosition(listsIds, rawLists) };
     }
     default:
       return state;

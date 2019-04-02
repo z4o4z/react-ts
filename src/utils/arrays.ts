@@ -14,3 +14,14 @@ export function normalizeArrayOfObjectsByKey<O, K extends keyof O>(
 
   return [keys, obj];
 }
+
+type ObjectWithPosition = {
+  position: number;
+};
+
+export function sortArrayOfIdsByPosition<O extends ObjectWithPosition>(
+  arr: string[],
+  obj: HashMap<O>
+) {
+  return arr.sort((l, r) => obj[l].position - obj[r].position);
+}

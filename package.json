@@ -3,14 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "4.0.0-alpha.5",
+    "@material-ui/icons": "4.0.0-alpha.1",
+    "@material-ui/lab": "^4.0.0-alpha.4",
+    "@material-ui/styles": "4.0.0-alpha.4",
+    "@material-ui/system": "4.0.0-alpha.0",
+    "@material-ui/utils": "4.0.0-alpha.4",
     "@types/react-redux": "^7.0.3",
+    "polished": "^3.1.0",
     "react": "^16.8.4",
+    "react-dnd": "^7.0.2",
+    "react-dnd-html5-backend": "^7.0.2",
     "react-dom": "^16.8.4",
     "react-redux": "^6.0.1",
-    "react-router-dom": "^4.4.0",
+    "react-router-dom": "^5.0.0",
     "react-scripts-ts": "3.1.0",
     "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "typeface-roboto": "0.0.54"
   },
   "scripts": {
     "start": "react-scripts-ts start",
