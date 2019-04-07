@@ -1,28 +1,58 @@
 import * as React from 'react';
-import { __EXPERIMENTAL_DND_HOOKS_THAT_MAY_CHANGE_AND_BREAK_MY_BUILD__ as dnd } from 'react-dnd';
+import {
+  DragLayerMonitor,
+  __EXPERIMENTAL_DND_HOOKS_THAT_MAY_CHANGE_AND_BREAK_MY_BUILD__ as dnd,
+} from 'react-dnd';
 
 const { useDragLayer } = dnd;
 
-type WithDragAndDropOptions = {
-  type: string;
+type DragLayerItem<P> = P & {
+  node: HTMLElement | null;
 };
 
-const dragLayerPropsCollector = () => ({});
+function dragLayerPropsCollector<P>(monitor: DragLayerMonitor) {
+  return {
+    item: monitor.getItem() as DragLayerItem<P>,
+    type: monitor.getItemType(),
+    isDragging: monitor.isDragging(),
+    offsetDiff: monitor.getDifferenceFromInitialOffset(),
+  };
+}
 
-function withDragAndDrop<P>({ type }: WithDragAndDropOptions) {
-  return (Component: React.ComponentType<P>) => (props: P & { dragItem?: object }) => {
+function withDragLayer<P>() {
+  return (Component: React.ComponentType<P>) => () => {
     const collectedProps = useDragLayer(dragLayerPropsCollector);
 
-    console.log(collectedProps);
+    if (
+      !collectedProps ||
+      !collectedProps.isDragging ||
+      !collectedProps.item.node ||
+      !collectedProps.offsetDiff
+    ) {
+      return null;
+    }
 
-    const { dragItem, ...ownProps } = props;
+    const {
+      item: { node, ...props },
+      offsetDiff,
+    } = collectedProps;
 
     return (
-      <div>
-        <Component {...ownProps as P} />
+      <div
+        style={{
+          width: `${node.clientWidth}px`,
+          height: `${node.clientHeight}px`,
+          position: 'absolute',
+          top: `${offsetDiff.y}px`,
+          left: `${offsetDiff.x}px`,
+          zIndex: 100,
+          pointerEvents: 'none',
+        }}
+      >
+        <Component {...props as P} />
       </div>
     );
   };
 }
 
-export default withDragAndDrop;
+export default withDragLayer;

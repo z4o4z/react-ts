@@ -14,8 +14,10 @@ import BoardItem from './components/BoardItem';
 
 type BoardsProps = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
 
-// const BoardItemDragLayer = withDragLayer<React.ComponentProps<typeof BoardItem>>({ type: 'board-item' })(BoardItem);
-const BoardItemDragAndDrop = withDragAndDrop<React.ComponentProps<typeof BoardItem>>({ type: 'board-item' })(BoardItem);
+const BoardItemDragLayer = withDragLayer<React.ComponentProps<typeof BoardItem>>()(BoardItem);
+const BoardItemDragAndDrop = withDragAndDrop<React.ComponentProps<typeof BoardItem>>({
+  type: 'board-item',
+})(BoardItem);
 
 function Boards({ ids, items, loading, boardsLoad }: BoardsProps) {
   useEffect(boardsLoad, []);
@@ -33,6 +35,8 @@ function Boards({ ids, items, loading, boardsLoad }: BoardsProps) {
           </Grid>
         ))
       )}
+
+      <BoardItemDragLayer />
     </Grid>
   );
 }
